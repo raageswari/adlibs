@@ -1,0 +1,767 @@
+128  *********************************************************************
+129  *  Assignment:    Final Project
+130  *
+131  *  Name:          Ragi Nayak
+132  *
+133  *  Date:          5/1/2019
+134  *-------------------------------------------------------------------
+135  *  Job name:      FINAL_rnayak.sas
+136  *
+137  *  Purpose:       Analyze the change in adlib use over time, since
+138  *                 the beginning of rap music.
+139  *
+140  *  Language:      SAS, VERSION 9.4
+141  *
+142  *  Input:         CSVs with randomly selected samples of rap music
+143  *                 from 1979 until 2019
+144  *
+145  *  Output:        A dataset with broken-down adlibs over time and
+146  *                 graphs depicting the change in adlib use.
+147  *
+148  ********************************************************************;
+149
+150  OPTIONS NODATE MERGENOBY=WARN VARINITCHK=WARN;
+151
+152  data yearlist;
+153      input year;
+154      datalines;
+
+NOTE: The data set WORK.YEARLIST has 11 observations and 1 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+166      ;
+167  run;
+168
+169  proc sql noprint;
+170      select year into :yearlist separated by ' '
+171          from work.yearlist;
+172  quit;
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.01 seconds
+
+
+173
+174  %put &yearlist;
+1979 1983 1987 1991 1995 1999 2003 2007 2011 2015 2019
+175
+176  libname data 'C:\Users\rnayak\Downloads\BIOS669_Final';
+NOTE: Libref DATA was successfully assigned as follows:
+      Engine:        V9
+      Physical Name: C:\Users\rnayak\Downloads\BIOS669_Final
+177
+178  %macro strip_parantheses;
+179
+180      %let i=1;
+181
+182      %do %until (%scan(&yearlist,&i)=);
+183          %let year=%scan(&yearlist,&i);
+184
+185      data adlib&year;
+186          set data.sas&year;
+187
+188          if find(lyric, '(');
+189
+190          where_open=find(lyric,'(');
+191          where_close=find(lyric,')');
+192
+193          lyric_line=lowcase(strip(substr(lyric,where_open+1,where_close-where_open-1)));
+194
+195          adlib=lyric_line;
+196
+197          do i=1 to countw(adlib,' ');
+198              lyrics=scan(adlib,i, ' ');
+199              output;
+200          end;
+201
+202      keep lyric_line lyrics;
+203
+204      run;
+205
+206      proc sql;
+207          create table adlib&year._final as
+208              select lyrics, compress(lyrics,,'p') as without_punct length = 32
+209          from adlib&year;
+210      quit;
+211
+212      %let i=%eval(&i+1);
+213      %end;
+214
+215  %mend strip_parantheses;
+216
+217  %strip_parantheses;
+NOTE: Data file DATA.SAS1979.DATA is in a format that is native to another host, or the file
+      encoding does not match the session encoding. Cross Environment Data Access will be used,
+      which might require additional CPU resources and might reduce performance.
+
+NOTE: Invalid third argument to function SUBSTR at line 1 column 185.
+VAR1=216 track_title=Disco Nights line=10 lyric=(The feelings right the m where_open=1
+where_close=0 lyric_line=the feelings right the m adlib=the feelings right the m i=6 lyrics=m
+_ERROR_=1 _N_=216
+NOTE: There were 261 observations read from the data set DATA.SAS1979.
+NOTE: The data set WORK.ADLIB1979 has 75 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Table WORK.ADLIB1979_FINAL created, with 75 rows and 2 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+NOTE: Data file DATA.SAS1983.DATA is in a format that is native to another host, or the file
+      encoding does not match the session encoding. Cross Environment Data Access will be used,
+      which might require additional CPU resources and might reduce performance.
+
+NOTE: Invalid third argument to function SUBSTR at line 5 column 189.
+VAR1=26 track_title=Billie Jean line=26
+lyric=Then showed a photo of a baby crying, his eyes were like mine (o where_open=63 where_close=0
+lyric_line=o adlib=o i=2 lyrics=o _ERROR_=1 _N_=26
+NOTE: Invalid third argument to function SUBSTR at line 5 column 189.
+VAR1=151 track_title=Atomic Dog line=19
+lyric=Un-tied dog in a telematic society(When you're out there walking where_open=35 where_close=0
+lyric_line=when you're out there walking adlib=when you're out there walking i=6 lyrics=walking
+_ERROR_=1 _N_=151
+NOTE: Invalid third argument to function SUBSTR at line 5 column 189.
+VAR1=152 track_title=Atomic Dog line=20 lyric=Ain't your average huckleberry hound(May compete
+where_open=37 where_close=0 lyric_line=may compete adlib=may compete i=3 lyrics=compete _ERROR_=1
+_N_=152
+NOTE: There were 405 observations read from the data set DATA.SAS1983.
+NOTE: The data set WORK.ADLIB1983 has 272 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Table WORK.ADLIB1983_FINAL created, with 272 rows and 2 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Data file DATA.SAS1987.DATA is in a format that is native to another host, or the file
+      encoding does not match the session encoding. Cross Environment Data Access will be used,
+      which might require additional CPU resources and might reduce performance.
+
+NOTE: There were 203 observations read from the data set DATA.SAS1987.
+NOTE: The data set WORK.ADLIB1987 has 68 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Table WORK.ADLIB1987_FINAL created, with 68 rows and 2 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+NOTE: Data file DATA.SAS1991.DATA is in a format that is native to another host, or the file
+      encoding does not match the session encoding. Cross Environment Data Access will be used,
+      which might require additional CPU resources and might reduce performance.
+
+NOTE: Invalid third argument to function SUBSTR at line 13 column 189.
+VAR1=208 track_title=I Like The Wa line=45
+lyric=You keep me looking forward to another day(I like the where_open=43 where_close=0
+lyric_line=i like the adlib=i like the i=4 lyrics=the _ERROR_=1 _N_=208
+NOTE: There were 360 observations read from the data set DATA.SAS1991.
+NOTE: The data set WORK.ADLIB1991 has 159 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Table WORK.ADLIB1991_FINAL created, with 159 rows and 2 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Data file DATA.SAS1995.DATA is in a format that is native to another host, or the file
+      encoding does not match the session encoding. Cross Environment Data Access will be used,
+      which might require additional CPU resources and might reduce performance.
+
+NOTE: Invalid third argument to function SUBSTR at line 17 column 189.
+VAR1=129 track_title=Freak Like Me line=41
+lyric=Any time of day, it's all good for me (It's all good f where_open=39 where_close=0
+lyric_line=it's all good f adlib=it's all good f i=5 lyrics=f _ERROR_=1 _N_=129
+NOTE: Invalid third argument to function SUBSTR at line 17 column 189.
+VAR1=142 track_title=Freak Like Me line=54
+lyric=Any time of day, it's all good for me (It's all good f where_open=39 where_close=0
+lyric_line=it's all good f adlib=it's all good f i=5 lyrics=f _ERROR_=1 _N_=142
+NOTE: Invalid third argument to function SUBSTR at line 17 column 189.
+VAR1=200 track_title=Baby line=48 lyric=Think about you all the time (Thinking about you all t
+where_open=30 where_close=0 lyric_line=thinking about you all t adlib=thinking about you all t i=6
+lyrics=t _ERROR_=1 _N_=200
+NOTE: Invalid third argument to function SUBSTR at line 17 column 189.
+VAR1=216 track_title=Baby line=64 lyric=Yeah, yeah, yeah, yeah, yeah, yeah (You're all I'm thi
+where_open=36 where_close=0 lyric_line=you're all i'm thi adlib=you're all i'm thi i=5 lyrics=thi
+_ERROR_=1 _N_=216
+NOTE: There were 322 observations read from the data set DATA.SAS1995.
+NOTE: The data set WORK.ADLIB1995 has 199 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Table WORK.ADLIB1995_FINAL created, with 199 rows and 2 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Data file DATA.SAS1999.DATA is in a format that is native to another host, or the file
+      encoding does not match the session encoding. Cross Environment Data Access will be used,
+      which might require additional CPU resources and might reduce performance.
+
+NOTE: Invalid third argument to function SUBSTR at line 21 column 189.
+VAR1=258 track_title=If You (Lovin' Me) line=49
+lyric=Ohh wee (Oh, if you feelin' like comin' home with Silk tonight, let me where_open=9
+where_close=0 lyric_line=oh, if you feelin' like comin' home with silk tonight, let me
+adlib=oh, if you feelin' like comin' home with silk tonight, let me i=13 lyrics=me _ERROR_=1
+_N_=258
+NOTE: Invalid third argument to function SUBSTR at line 21 column 189.
+VAR1=312 track_title=When I Close My Eyes line=40 lyric=(It's something 'bout the way where_open=1
+where_close=0 lyric_line=it's something 'bout the way adlib=it's something 'bout the way i=6
+lyrics=way _ERROR_=1 _N_=312
+NOTE: There were 324 observations read from the data set DATA.SAS1999.
+NOTE: The data set WORK.ADLIB1999 has 183 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Table WORK.ADLIB1999_FINAL created, with 183 rows and 2 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Data file DATA.SAS2003.DATA is in a format that is native to another host, or the file
+      encoding does not match the session encoding. Cross Environment Data Access will be used,
+      which might require additional CPU resources and might reduce performance.
+
+NOTE: Invalid third argument to function SUBSTR at line 25 column 189.
+VAR1=20 track_title=In Da Club line=20
+lyric=I see Xzibit in the cut, hey nigga, roll that weed up! (Roll that where_open=56
+where_close=0 lyric_line=roll that adlib=roll that i=3 lyrics=that _ERROR_=1 _N_=20
+NOTE: Invalid third argument to function SUBSTR at line 25 column 189.
+VAR1=22 track_title=In Da Club line=22
+lyric=Been hit with a few shells, but I don't walk with a limp (I'm aig where_open=58
+where_close=0 lyric_line=i'm aig adlib=i'm aig i=3 lyrics=aig _ERROR_=1 _N_=22
+NOTE: Invalid third argument to function SUBSTR at line 25 column 189.
+VAR1=29 track_title=In Da Club line=29
+lyric=Now Shorty said she feelin' my style, she feelin' my flow (Huh-uh where_open=59
+where_close=0 lyric_line=huh-uh adlib=huh-uh i=2 lyrics=huh-uh _ERROR_=1 _N_=29
+NOTE: Invalid third argument to function SUBSTR at line 25 column 189.
+VAR1=150 track_title=Excuse Me Mi line=11
+lyric=That should be hangin' with Jay-Z, Jay-Z(Pharrell: So hot to trot where_open=41
+where_close=0 lyric_line=pharrell: so hot to trot adlib=pharrell: so hot to trot i=6 lyrics=trot
+_ERROR_=1 _N_=150
+NOTE: Invalid third argument to function SUBSTR at line 25 column 189.
+VAR1=261 track_title=Beautiful line=42
+lyric=And we gon' be together until your moms move in(Yeah, oh yeah, th where_open=48
+where_close=0 lyric_line=yeah, oh yeah, th adlib=yeah, oh yeah, th i=5 lyrics=th _ERROR_=1 _N_=261
+NOTE: Invalid third argument to function SUBSTR at line 25 column 189.
+VAR1=269 track_title=Beautiful line=50
+lyric=To know that you are really special(Yeah, oh yeah, there's someth where_open=36
+where_close=0 lyric_line=yeah, oh yeah, there's someth adlib=yeah, oh yeah, there's someth i=6
+lyrics=someth _ERROR_=1 _N_=269
+NOTE: Invalid third argument to function SUBSTR at line 25 column 189.
+VAR1=272 track_title=Beautiful line=53
+lyric=To know that you are really special(Yeah, oh yeah, there's someth where_open=36
+where_close=0 lyric_line=yeah, oh yeah, there's someth adlib=yeah, oh yeah, there's someth i=6
+lyrics=someth _ERROR_=1 _N_=272
+NOTE: Invalid third argument to function SUBSTR at line 25 column 189.
+VAR1=273 track_title=Beautiful line=54
+lyric=Oh my, oh my, oh my, oh my(Yeah, oh yeah, there's something about where_open=27
+where_close=0 lyric_line=yeah, oh yeah, there's something about
+adlib=yeah, oh yeah, there's something about i=7 lyrics=about _ERROR_=1 _N_=273
+NOTE: Invalid third argument to function SUBSTR at line 25 column 189.
+VAR1=280 track_title=Beautiful line=61
+lyric=Twist up my fingers, and wear dark blue and(Yeah, oh yeah, there' where_open=44
+where_close=0 lyric_line=yeah, oh yeah, there' adlib=yeah, oh yeah, there' i=5 lyrics=there'
+_ERROR_=1 _N_=280
+NOTE: Invalid third argument to function SUBSTR at line 25 column 189.
+VAR1=290 track_title=Beautiful line=71
+lyric=To know that you are really special(Yeah, oh yeah, there's someth where_open=36
+where_close=0 lyric_line=yeah, oh yeah, there's someth adlib=yeah, oh yeah, there's someth i=6
+lyrics=someth _ERROR_=1 _N_=290
+NOTE: Invalid third argument to function SUBSTR at line 25 column 189.
+VAR1=293 track_title=Beautiful line=74
+lyric=To know that you are really special(Yeah, oh yeah, there's someth where_open=36
+where_close=0 lyric_line=yeah, oh yeah, there's someth adlib=yeah, oh yeah, there's someth i=6
+lyrics=someth _ERROR_=1 _N_=293
+NOTE: Invalid third argument to function SUBSTR at line 25 column 189.
+VAR1=296 track_title=Beautiful line=77
+lyric=To know that you are really special(Yeah, oh yeah, there's someth where_open=36
+where_close=0 lyric_line=yeah, oh yeah, there's someth adlib=yeah, oh yeah, there's someth i=6
+lyrics=someth _ERROR_=1 _N_=296
+NOTE: Invalid third argument to function SUBSTR at line 25 column 189.
+VAR1=299 track_title=Beautiful line=80
+lyric=To know that you are really special(Yeah, oh yeah, there's someth where_open=36
+where_close=0 lyric_line=yeah, oh yeah, there's someth adlib=yeah, oh yeah, there's someth i=6
+lyrics=someth _ERROR_=1 _N_=299
+NOTE: Invalid third argument to function SUBSTR at line 25 column 189.
+VAR1=308 track_title=How You Gonn line=5
+lyric=We would sit and talk for hours about anything(Baby, you hang up, where_open=47
+where_close=0 lyric_line=baby, you hang up, adlib=baby, you hang up, i=5 lyrics=up, _ERROR_=1
+_N_=308
+NOTE: Invalid third argument to function SUBSTR at line 25 column 189.
+VAR1=369 track_title=How You Gonn line=66
+lyric=How you gonna up and leave me now (Oh, babe, how you gonna act li where_open=35
+where_close=0 lyric_line=oh, babe, how you gonna act li adlib=oh, babe, how you gonna act li i=8
+lyrics=li _ERROR_=1 _N_=369
+NOTE: Invalid third argument to function SUBSTR at line 25 column 189.
+VAR1=373 track_title=How You Gonn line=70
+lyric=How you gonna act like that (Anything you want in me I got ya, he where_open=29
+where_close=0 lyric_line=anything you want in me i got ya, he
+adlib=anything you want in me i got ya, he i=10 lyrics=he _ERROR_=1 _N_=373
+NOTE: Invalid third argument to function SUBSTR at line 25 column 189.
+VAR1=375 track_title=How You Gonn line=72
+lyric=You know we be tearin' it up, breakin' stuff (Why you actin' so c where_open=46
+where_close=0 lyric_line=why you actin' so c adlib=why you actin' so c i=6 lyrics=c _ERROR_=1
+_N_=375
+NOTE: There were 379 observations read from the data set DATA.SAS2003.
+NOTE: The data set WORK.ADLIB2003 has 316 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.05 seconds
+      cpu time            0.06 seconds
+
+
+NOTE: Table WORK.ADLIB2003_FINAL created, with 316 rows and 2 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+NOTE: Data file DATA.SAS2007.DATA is in a format that is native to another host, or the file
+      encoding does not match the session encoding. Cross Environment Data Access will be used,
+      which might require additional CPU resources and might reduce performance.
+
+NOTE: Invalid second argument to function SUBSTR at line 29 column 189.
+VAR1=281 track_title=This Is Why I'm line=67
+lyric=So when I hit the room, the shorties stop and stare ( where_open=53 where_close=0
+lyric_line=  adlib=  i=1 lyrics=  _ERROR_=1 _N_=281
+NOTE: There were 366 observations read from the data set DATA.SAS2007.
+NOTE: The data set WORK.ADLIB2007 has 54 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Table WORK.ADLIB2007_FINAL created, with 54 rows and 2 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+NOTE: Data file DATA.SAS2011.DATA is in a format that is native to another host, or the file
+      encoding does not match the session encoding. Cross Environment Data Access will be used,
+      which might require additional CPU resources and might reduce performance.
+
+NOTE: There were 373 observations read from the data set DATA.SAS2011.
+NOTE: The data set WORK.ADLIB2011 has 99 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Table WORK.ADLIB2011_FINAL created, with 99 rows and 2 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+NOTE: Data file DATA.SAS2015.DATA is in a format that is native to another host, or the file
+      encoding does not match the session encoding. Cross Environment Data Access will be used,
+      which might require additional CPU resources and might reduce performance.
+
+NOTE: There were 302 observations read from the data set DATA.SAS2015.
+NOTE: The data set WORK.ADLIB2015 has 77 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+NOTE: Table WORK.ADLIB2015_FINAL created, with 77 rows and 2 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Data file DATA.SAS2019.DATA is in a format that is native to another host, or the file
+      encoding does not match the session encoding. Cross Environment Data Access will be used,
+      which might require additional CPU resources and might reduce performance.
+
+NOTE: There were 302 observations read from the data set DATA.SAS2019.
+NOTE: The data set WORK.ADLIB2019 has 143 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+NOTE: Table WORK.ADLIB2019_FINAL created, with 143 rows and 2 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+218
+219
+220  %macro freq;
+221
+222      %let i=1;
+223
+224      %do %until (%scan(&yearlist,&i)= );
+225          %let year=%scan(&yearlist,&i);
+226
+227      proc freq data=adlib&year._final noprint;
+228      tables without_punct / nocum nopercent
+229                          out=adlibsforyear&year;
+230      run;
+231
+232      %let i=%eval(&i+1);
+233      %end;
+234
+235      quit;
+236
+237  %mend freq;
+238
+239  %freq;
+
+NOTE: There were 75 observations read from the data set WORK.ADLIB1979_FINAL.
+NOTE: The data set WORK.ADLIBSFORYEAR1979 has 28 observations and 3 variables.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.01 seconds
+
+
+
+NOTE: There were 272 observations read from the data set WORK.ADLIB1983_FINAL.
+NOTE: The data set WORK.ADLIBSFORYEAR1983 has 60 observations and 3 variables.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.01 seconds
+
+
+
+NOTE: There were 68 observations read from the data set WORK.ADLIB1987_FINAL.
+NOTE: The data set WORK.ADLIBSFORYEAR1987 has 23 observations and 3 variables.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.00 seconds
+
+
+
+NOTE: There were 159 observations read from the data set WORK.ADLIB1991_FINAL.
+NOTE: The data set WORK.ADLIBSFORYEAR1991 has 32 observations and 3 variables.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.01 seconds
+
+
+
+NOTE: There were 199 observations read from the data set WORK.ADLIB1995_FINAL.
+NOTE: The data set WORK.ADLIBSFORYEAR1995 has 32 observations and 3 variables.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.00 seconds
+
+
+
+NOTE: There were 183 observations read from the data set WORK.ADLIB1999_FINAL.
+NOTE: The data set WORK.ADLIBSFORYEAR1999 has 62 observations and 3 variables.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.00 seconds
+
+
+
+NOTE: There were 316 observations read from the data set WORK.ADLIB2003_FINAL.
+NOTE: The data set WORK.ADLIBSFORYEAR2003 has 109 observations and 3 variables.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.00 seconds
+
+
+
+NOTE: There were 54 observations read from the data set WORK.ADLIB2007_FINAL.
+NOTE: The data set WORK.ADLIBSFORYEAR2007 has 10 observations and 3 variables.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.00 seconds
+
+
+
+NOTE: There were 99 observations read from the data set WORK.ADLIB2011_FINAL.
+NOTE: The data set WORK.ADLIBSFORYEAR2011 has 24 observations and 3 variables.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.01 seconds
+
+
+
+NOTE: There were 77 observations read from the data set WORK.ADLIB2015_FINAL.
+NOTE: The data set WORK.ADLIBSFORYEAR2015 has 37 observations and 3 variables.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.01 seconds
+
+
+
+NOTE: There were 143 observations read from the data set WORK.ADLIB2019_FINAL.
+NOTE: The data set WORK.ADLIBSFORYEAR2019 has 65 observations and 3 variables.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.01 seconds
+
+
+240
+241  %macro select(year=);
+242      %let i=1;
+243
+244      %do %until (%scan(&yearlist,&i)= );
+245          %let year=%scan(&yearlist,&i);
+246      title "&year";
+247
+248      proc sql;
+249          create table merge_sets&year as
+250          select without_punct, count, &year as year_created from adlibsforyear&year
+251          where count>2;
+252      quit;
+253
+254          %let i=%eval(&i+1);
+255      %end;
+256
+257      quit;
+258  %mend select;
+259
+260  %select;
+NOTE: Table WORK.MERGE_SETS1979 created, with 6 rows and 3 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Table WORK.MERGE_SETS1983 created, with 20 rows and 3 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+NOTE: Table WORK.MERGE_SETS1987 created, with 8 rows and 3 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Table WORK.MERGE_SETS1991 created, with 15 rows and 3 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Table WORK.MERGE_SETS1995 created, with 13 rows and 3 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+NOTE: Table WORK.MERGE_SETS1999 created, with 19 rows and 3 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Table WORK.MERGE_SETS2003 created, with 25 rows and 3 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Table WORK.MERGE_SETS2007 created, with 6 rows and 3 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+NOTE: Table WORK.MERGE_SETS2011 created, with 15 rows and 3 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Table WORK.MERGE_SETS2015 created, with 6 rows and 3 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+
+
+NOTE: Table WORK.MERGE_SETS2019 created, with 16 rows and 3 columns.
+
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+
+
+261
+262  %macro graph(year=);
+263      %let i=1;
+264      %do %until (%scan(&yearlist,&i)= );
+265          %let year=%scan(&yearlist,&i);
+266      TITLE 'Common Adlibs Used by Artists (freq>2) in &year';
+267      PROC SGPLOT DATA = merge_sets&year;
+268          VBAR without_punct / RESPONSE = count;
+269          label without_punct="Adlib Used by Artist";
+270      RUN;
+271      TITLE;
+272              %let i=%eval(&i+1);
+273      %end;
+274
+275      quit;
+276  %mend graph;
+277
+278  %graph;
+
+NOTE: PROCEDURE SGPLOT used (Total process time):
+      real time           0.16 seconds
+      cpu time            0.04 seconds
+
+NOTE: There were 6 observations read from the data set WORK.MERGE_SETS1979.
+
+
+NOTE: PROCEDURE SGPLOT used (Total process time):
+      real time           0.16 seconds
+      cpu time            0.06 seconds
+
+NOTE: There were 20 observations read from the data set WORK.MERGE_SETS1983.
+
+
+NOTE: PROCEDURE SGPLOT used (Total process time):
+      real time           0.16 seconds
+      cpu time            0.04 seconds
+
+NOTE: There were 8 observations read from the data set WORK.MERGE_SETS1987.
+
+
+NOTE: PROCEDURE SGPLOT used (Total process time):
+      real time           0.16 seconds
+      cpu time            0.03 seconds
+
+NOTE: There were 15 observations read from the data set WORK.MERGE_SETS1991.
+
+
+NOTE: PROCEDURE SGPLOT used (Total process time):
+      real time           0.15 seconds
+      cpu time            0.04 seconds
+
+NOTE: There were 13 observations read from the data set WORK.MERGE_SETS1995.
+
+
+NOTE: PROCEDURE SGPLOT used (Total process time):
+      real time           0.15 seconds
+      cpu time            0.04 seconds
+
+NOTE: There were 19 observations read from the data set WORK.MERGE_SETS1999.
+
+
+NOTE: PROCEDURE SGPLOT used (Total process time):
+      real time           0.16 seconds
+      cpu time            0.06 seconds
+
+NOTE: There were 25 observations read from the data set WORK.MERGE_SETS2003.
+
+
+NOTE: PROCEDURE SGPLOT used (Total process time):
+      real time           0.15 seconds
+      cpu time            0.06 seconds
+
+NOTE: There were 6 observations read from the data set WORK.MERGE_SETS2007.
+
+
+NOTE: PROCEDURE SGPLOT used (Total process time):
+      real time           0.15 seconds
+      cpu time            0.03 seconds
+
+NOTE: There were 15 observations read from the data set WORK.MERGE_SETS2011.
+
+
+NOTE: PROCEDURE SGPLOT used (Total process time):
+      real time           0.15 seconds
+      cpu time            0.06 seconds
+
+NOTE: There were 6 observations read from the data set WORK.MERGE_SETS2015.
+
+
+NOTE: PROCEDURE SGPLOT used (Total process time):
+      real time           0.16 seconds
+      cpu time            0.07 seconds
+
+NOTE: There were 16 observations read from the data set WORK.MERGE_SETS2019.
+
+279
+280  data all_adlibs;
+281      set merge_sets1979 merge_sets1983 merge_sets1987
+282          merge_sets1991 merge_sets1995 merge_sets1999
+283          merge_sets2003 merge_sets2011 merge_sets2015
+284          merge_sets2019;
+285      label without_punct='Adlib Used by Artist'
+286            count='Frequency';
+287  run;
+
+NOTE: There were 6 observations read from the data set WORK.MERGE_SETS1979.
+NOTE: There were 20 observations read from the data set WORK.MERGE_SETS1983.
+NOTE: There were 8 observations read from the data set WORK.MERGE_SETS1987.
+NOTE: There were 15 observations read from the data set WORK.MERGE_SETS1991.
+NOTE: There were 13 observations read from the data set WORK.MERGE_SETS1995.
+NOTE: There were 19 observations read from the data set WORK.MERGE_SETS1999.
+NOTE: There were 25 observations read from the data set WORK.MERGE_SETS2003.
+NOTE: There were 15 observations read from the data set WORK.MERGE_SETS2011.
+NOTE: There were 6 observations read from the data set WORK.MERGE_SETS2015.
+NOTE: There were 16 observations read from the data set WORK.MERGE_SETS2019.
+NOTE: The data set WORK.ALL_ADLIBS has 143 observations and 3 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.03 seconds
+
+
+288
+289  proc sgplot data=all_adlibs;
+290      vbar without_punct / response=count group=year_created;
+291      xaxis display=(nolabel);
+292      yaxis grid  label='Sales';
+293  run;
+
+NOTE: PROCEDURE SGPLOT used (Total process time):
+      real time           0.22 seconds
+      cpu time            0.03 seconds
+
+NOTE: There were 143 observations read from the data set WORK.ALL_ADLIBS.
+

@@ -1,0 +1,281 @@
+ 
+ 1          OPTIONS NONOTES NOSTIMER NOSOURCE NOSYNTAXCHECK;
+ 72         
+ 73         libname data '/folders/myfolders/BIOS669/Final/Data';
+ NOTE: Libref DATA refers to the same physical library as _TEMP0.
+ NOTE: Libref DATA was successfully assigned as follows: 
+       Engine:        V9 
+       Physical Name: /folders/myfolders/BIOS669/Final/Data
+ 74         
+ 75         
+ 76         FILENAME REFFILE '/folders/myfolders/BIOS669/Final/R_files/tot1979.csv';
+ 77         
+ 78         PROC IMPORT DATAFILE=REFFILE
+ 79         DBMS=CSV
+ 80         OUT=DATA.SAS1979;
+ 81         GETNAMES=YES;
+ 82         RUN;
+ 
+ NOTE: Import cancelled.  Output dataset DATA.SAS1979 already exists.  Specify REPLACE option to overwrite it.
+ NOTE: The SAS System stopped processing this step because of errors.
+ NOTE: PROCEDURE IMPORT used (Total process time):
+       real time           0.00 seconds
+       cpu time            0.00 seconds
+       
+ 83         
+ 84         
+ 85         
+ 86         FILENAME REFFILE '/folders/myfolders/BIOS669/Final/R_files/tot1983.csv';
+ 87         
+ 
+ 
+ 88         PROC IMPORT DATAFILE=REFFILE
+ 89         DBMS=CSV
+ 90         OUT=DATA.SAS1983;
+ 91         GETNAMES=YES;
+ 92         RUN;
+ 
+ NOTE: Import cancelled.  Output dataset DATA.SAS1983 already exists.  Specify REPLACE option to overwrite it.
+ NOTE: The SAS System stopped processing this step because of errors.
+ NOTE: PROCEDURE IMPORT used (Total process time):
+       real time           0.00 seconds
+       cpu time            0.00 seconds
+       
+ 93         
+ 94         
+ 95         
+ 96         FILENAME REFFILE '/folders/myfolders/BIOS669/Final/R_files/tot1987.csv';
+ 97         
+ 
+ 
+ 98         PROC IMPORT DATAFILE=REFFILE
+ 99         DBMS=CSV
+ 100        OUT=DATA.SAS1987;
+ 101        GETNAMES=YES;
+ 102        RUN;
+ 
+ NOTE: Import cancelled.  Output dataset DATA.SAS1987 already exists.  Specify REPLACE option to overwrite it.
+ NOTE: The SAS System stopped processing this step because of errors.
+ NOTE: PROCEDURE IMPORT used (Total process time):
+       real time           0.00 seconds
+       cpu time            0.00 seconds
+       
+ 103        
+ 104        
+ 105        
+ 106        
+ 107        FILENAME REFFILE '/folders/myfolders/BIOS669/Final/R_files/tot1991.csv';
+ 108        
+ 
+ 
+ 109        PROC IMPORT DATAFILE=REFFILE
+ 110        DBMS=CSV
+ 111        OUT=DATA.SAS1991;
+ 112        GETNAMES=YES;
+ 113        RUN;
+ 
+ NOTE: Import cancelled.  Output dataset DATA.SAS1991 already exists.  Specify REPLACE option to overwrite it.
+ NOTE: The SAS System stopped processing this step because of errors.
+ NOTE: PROCEDURE IMPORT used (Total process time):
+       real time           0.00 seconds
+       cpu time            0.00 seconds
+       
+ 114        
+ 115        
+ 116        
+ 117        FILENAME REFFILE '/folders/myfolders/BIOS669/Final/R_files/tot1995.csv';
+ 118        
+ 
+ 
+ 119        PROC IMPORT DATAFILE=REFFILE
+ 120        DBMS=CSV
+ 121        OUT=DATA.SAS1995;
+ 122        GETNAMES=YES;
+ 123        RUN;
+ 
+ NOTE: Import cancelled.  Output dataset DATA.SAS1995 already exists.  Specify REPLACE option to overwrite it.
+ NOTE: The SAS System stopped processing this step because of errors.
+ NOTE: PROCEDURE IMPORT used (Total process time):
+       real time           0.00 seconds
+       cpu time            0.00 seconds
+       
+ 124        
+ 125        
+ 126        FILENAME REFFILE '/folders/myfolders/BIOS669/Final/R_files/tot1999.csv';
+ 127        
+ 
+ 
+ 128        PROC IMPORT DATAFILE=REFFILE
+ 129        DBMS=CSV
+ 130        OUT=DATA.SAS1999;
+ 131        GETNAMES=YES;
+ 132        RUN;
+ 
+ NOTE: Import cancelled.  Output dataset DATA.SAS1999 already exists.  Specify REPLACE option to overwrite it.
+ NOTE: The SAS System stopped processing this step because of errors.
+ NOTE: PROCEDURE IMPORT used (Total process time):
+       real time           0.01 seconds
+       cpu time            0.02 seconds
+       
+ 133        
+ 134        FILENAME REFFILE '/folders/myfolders/BIOS669/Final/R_files/tot2003.csv';
+ 135        
+ 
+ 
+ 136        PROC IMPORT DATAFILE=REFFILE
+ 137        DBMS=CSV
+ 138        OUT=DATA.SA2003;
+ 139        GETNAMES=YES;
+ 140        RUN;
+ 
+ NOTE: Unable to open parameter catalog: SASUSER.PARMS.PARMS.SLIST in update mode. Temporary parameter values will be saved to 
+ WORK.PARMS.PARMS.SLIST.
+ Name "" is not a valid SAS name.
+ Problems were detected with provided names.  See LOG. 
+ 141         /**********************************************************************
+ 142         *   PRODUCT:   SAS
+ 143         *   VERSION:   9.4
+ 144         *   CREATOR:   External File Interface
+ 145         *   DATE:      02MAY19
+ 146         *   DESC:      Generated SAS Datastep Code
+ 147         *   TEMPLATE SOURCE:  (None Specified.)
+ 148         ***********************************************************************/
+ 149            data DATA.SA2003    ;
+ 150            %let _EFIERR_ = 0; /* set the ERROR detection macro variable */
+ 151            infile REFFILE delimiter = ',' MISSOVER DSD  firstobs=2 ;
+ 152               informat VAR1 $4. ;
+ 153               informat track_title $12. ;
+ 154               informat line best32. ;
+ 155               informat lyric $65. ;
+ 156               format VAR1 $4. ;
+ 157               format track_title $12. ;
+ 158               format line best12. ;
+ 159               format lyric $65. ;
+ 160            input
+ 161                        VAR1  $
+ 162                        track_title  $
+ 163                        line
+ 164                        lyric  $
+ 165            ;
+ 166            if _ERROR_ then call symputx('_EFIERR_',1);  /* set ERROR detection macro variable */
+ 167            run;
+ 
+ NOTE: The infile REFFILE is:
+       Filename=/folders/myfolders/BIOS669/Final/R_files/tot2003.csv,
+       Owner Name=root,Group Name=vboxsf,
+       Access Permission=-rwxrwx---,
+       Last Modified=16Apr2019:19:36:35,
+       File Size (bytes)=26355
+ 
+ NOTE: 379 records were read from the infile REFFILE.
+       The minimum record length was 21.
+       The maximum record length was 152.
+ NOTE: The data set DATA.SA2003 has 379 observations and 4 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.13 seconds
+       cpu time            0.03 seconds
+       
+ 
+ 379 rows created in DATA.SA2003 from REFFILE.
+   
+   
+   
+ NOTE: DATA.SA2003 data set was successfully created.
+ NOTE: The data set DATA.SA2003 has 379 observations and 4 variables.
+ NOTE: PROCEDURE IMPORT used (Total process time):
+       real time           0.55 seconds
+       cpu time            0.23 seconds
+       
+ 
+ 168        
+ 169        FILENAME REFFILE '/folders/myfolders/BIOS669/Final/R_files/tot2007.csv';
+ 170        
+ 171        PROC IMPORT DATAFILE=REFFILE
+ 172        DBMS=CSV
+ 173        OUT=DATA.SAS2007;
+ 174        GETNAMES=YES;
+ 175        RUN;
+ 
+ NOTE: Import cancelled.  Output dataset DATA.SAS2007 already exists.  Specify REPLACE option to overwrite it.
+ NOTE: The SAS System stopped processing this step because of errors.
+ NOTE: PROCEDURE IMPORT used (Total process time):
+       real time           0.00 seconds
+       cpu time            0.02 seconds
+       
+ 176        
+ 177        FILENAME REFFILE '/folders/myfolders/BIOS669/Final/R_files/tot2011.csv';
+ 178        
+ 
+ 
+ 179        PROC IMPORT DATAFILE=REFFILE
+ 180        DBMS=CSV
+ 181        OUT=DATA.SAS2011;
+ 182        GETNAMES=YES;
+ 183        RUN;
+ 
+ NOTE: Import cancelled.  Output dataset DATA.SAS2011 already exists.  Specify REPLACE option to overwrite it.
+ NOTE: The SAS System stopped processing this step because of errors.
+ NOTE: PROCEDURE IMPORT used (Total process time):
+       real time           0.01 seconds
+       cpu time            0.00 seconds
+       
+ 184        
+ 185        FILENAME REFFILE '/folders/myfolders/BIOS669/Final/R_files/tot2015.csv';
+ 186        
+ 
+ 
+ 187        PROC IMPORT DATAFILE=REFFILE
+ 188        DBMS=CSV
+ 189        OUT=DATA.SAS2015;
+ 190        GETNAMES=YES;
+ 191        RUN;
+ 
+ NOTE: Import cancelled.  Output dataset DATA.SAS2015 already exists.  Specify REPLACE option to overwrite it.
+ NOTE: The SAS System stopped processing this step because of errors.
+ NOTE: PROCEDURE IMPORT used (Total process time):
+       real time           0.00 seconds
+       cpu time            0.00 seconds
+       
+ 192        
+ 193        FILENAME REFFILE '/folders/myfolders/BIOS669/Final/R_files/tot2019.csv';
+ 194        
+ 
+ 
+ 195        PROC IMPORT DATAFILE=REFFILE
+ 196        DBMS=CSV
+ 197        OUT=DATA.SAS2019;
+ 198        GETNAMES=YES;
+ 199        RUN;
+ 
+ NOTE: Import cancelled.  Output dataset DATA.SAS2019 already exists.  Specify REPLACE option to overwrite it.
+ NOTE: The SAS System stopped processing this step because of errors.
+ NOTE: PROCEDURE IMPORT used (Total process time):
+       real time           0.01 seconds
+       cpu time            0.01 seconds
+       
+ 200        
+ 201        
+ 202        
+ 203        
+ 204        
+ 205        
+ 206        
+ 207        
+ 208        
+ 209        
+ 210        
+ 211        
+ 212        
+ 213        
+ 214        
+ 215        
+ 216        
+ 217        
+ 218        
+ 219        
+ 220        
+ 221        
+ 222        
+ 223        
+ 224        OPTIONS NONOTES NOSTIMER NOSOURCE NOSYNTAXCHECK;
+ 236        
